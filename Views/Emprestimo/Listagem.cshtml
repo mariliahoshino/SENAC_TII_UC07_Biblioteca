@@ -8,8 +8,14 @@
     <form class="form-inline" method="POST">
         <div class="form-group mb-2">
             <select name="TipoFiltro" class="form-control">
+                
                 <option value="Usuario">Usuário</option>
                 <option value="Livro">Livro</option>
+                
+                <!--
+                <option value="DataDevolucao">DataDevolucao/option>
+                <option value="Livro">Livro</option>
+                -->
             </select>
         </div>
         <div class="form-group mb-2 mx-sm-3">
@@ -22,7 +28,10 @@
 
 <div class="row">
     <div class="col-md-12">
-        <table > 
+        @if(Model.Count>0)
+        {  <!-- adicionado if 2021 10 09-->
+        <table class="table table-striped"> <!-- mexi aqui 2021 09 21 -->
+        <!-- <table > -->
             <thead>
                 <tr><th>Id</th>
                 <th>Usuario</th>
@@ -34,20 +43,23 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(Emprestimo e in Model)
-                {
-                <tr>
-                    <td>@e.Id</td>
-                    <td>@e.NomeUsuario</td>
-                    <td>@e.DataEmprestimo.ToString("dd/MM/yyyy")</td>
-                    <td>@e.DataDevolucao.ToString("dd/MM/yyyy")</td>
-                    <td>@e.Livro.Titulo</td>
-                    <td>@e.Livro.Autor</td>
-                    <td><a href="/Emprestimo/Edicao/@e.Id">Editar</a></td>
-                </tr>
-                }
+                    @foreach(Emprestimo e in Model)
+                    {
+                    <tr>
+                        <td>@e.Id</td>
+                        <td>@e.NomeUsuario</td>
+                        <td>@e.DataEmprestimo.ToString("dd/MM/yyyy")</td>
+                        <td>@e.DataDevolucao.ToString("dd/MM/yyyy")</td>
+                        <td>@e.Livro.Titulo</td>
+                        <td>@e.Livro.Autor</td>
+                        <td><a href="/Emprestimo/Edicao/@e.Id">Editar</a></td>
+                    </tr>
+                    }
             </tbody>
         </table>
+        } else{
+                    <p>Nenhum registro encontrado.</p>
+        }
     </div>
 </div>
 

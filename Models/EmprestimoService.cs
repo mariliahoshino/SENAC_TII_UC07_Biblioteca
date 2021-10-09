@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace Biblioteca.Models
 {
@@ -25,11 +26,13 @@ namespace Biblioteca.Models
                 emprestimo.LivroId = e.LivroId;
                 emprestimo.DataEmprestimo = e.DataEmprestimo;
                 emprestimo.DataDevolucao = e.DataDevolucao;
+                emprestimo.Devolvido = e.Devolvido;  //2021 10 09 agora o checkbox registra
 
                 bc.SaveChanges();
             }
         }
 
+/*
         public ICollection<Emprestimo> ListarTodos(FiltrosEmprestimos filtro)
         {
             using(BibliotecaContext bc = new BibliotecaContext())
@@ -37,6 +40,51 @@ namespace Biblioteca.Models
                 return bc.Emprestimos.Include(e => e.Livro).ToList();
             }
         }
+
+*/
+
+
+
+        public ICollection<Emprestimo> ListarTodos(FiltrosEmprestimos filtro =null)   //aqui
+        {
+            using(BibliotecaContext bc = new BibliotecaContext())
+            {
+                IQueryable<Emprestimo> query; //aqui
+                
+                if(filtro != null)
+                {
+                    //definindo dinamicamente a filtragem
+                    switch(filtro.TipoFiltro)
+                    {
+                        case "Usuario": //aqui
+                            query = bc.Emprestimos.Include(e => e.Livro).Where(e => e.NomeUsuario.Contains(filtro.Filtro)); //aqui
+                        break;
+
+                        case "Livro": //aqui
+                            query = bc.Emprestimos.Include(e => e.Livro).Where(e => e.Livro.Titulo.Contains(filtro.Filtro));  //aqui
+                        break;
+
+                        default:
+                            query = bc.Emprestimos.Include(e => e.Livro); //aqui
+                        break;
+                    }
+                }
+                else
+                {
+                    // caso filtro não tenha sido informado
+                    query = bc.Emprestimos.Include(e => e.Livro); //aqui
+                }
+                
+                //ordenação padrão
+                return query.OrderByDescending(e => e.DataDevolucao).ToList(); //aqui
+            }
+        }
+
+
+
+
+
+
 
         public Emprestimo ObterPorId(int id)
         {
