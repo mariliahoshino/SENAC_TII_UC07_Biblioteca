@@ -22,7 +22,7 @@ namespace Biblioteca.Controllers
         }
 
         [HttpPost]
-        public IActionResult Cadastro(CadEmprestimoViewModel viewModel)
+        public IActionResult Cadastro(CadEmprestimoViewModel viewModel) //1:33:00 no vídeo passa rápido
         {
             EmprestimoService emprestimoService = new EmprestimoService();
             
@@ -36,7 +36,7 @@ namespace Biblioteca.Controllers
             }
             return RedirectToAction("Listagem");
         }
-
+            /*
         public IActionResult Listagem(string tipoFiltro, string filtro)
         {
             Autenticacao.CheckLogin(this); //2021 10 08
@@ -50,7 +50,39 @@ namespace Biblioteca.Controllers
             }
             EmprestimoService emprestimoService = new EmprestimoService();
             return View(emprestimoService.ListarTodos(objFiltro));
+        }  */
+
+
+        public IActionResult Listagem(string tipoFiltro, string filtro, string itensPorPagina, int NumDaPagina, int PaginaAtual)/////
+        {
+            Autenticacao.CheckLogin(this);
+
+            FiltrosEmprestimos objFiltro = null;
+            if(!string.IsNullOrEmpty(filtro))
+            {
+                objFiltro = new FiltrosEmprestimos();
+                objFiltro.Filtro = filtro;
+                objFiltro.TipoFiltro = tipoFiltro;
+            }
+                ViewData["emprestimosPorPagina"] = (string.IsNullOrEmpty(itensPorPagina) ? 10 : Int32.Parse(itensPorPagina));///////
+                ViewData["PaginaAtual"] = (PaginaAtual !=0 ? PaginaAtual : 1);
+
+            EmprestimoService emprestimoService = new EmprestimoService();
+            return View(emprestimoService.ListarTodos(objFiltro));
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public IActionResult Edicao(int id)
         {

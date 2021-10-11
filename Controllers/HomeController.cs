@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Biblioteca.Models;
 using Microsoft.AspNetCore.Http;
-
+//1h34 no vídeo
 namespace Biblioteca.Controllers
 {
     public class HomeController : Controller
@@ -33,16 +33,15 @@ namespace Biblioteca.Controllers
         [HttpPost]
         public IActionResult Login(string login, string senha)
         {
-            if(login != "admin" || senha != "123")
+            if(Autenticacao.verificaLoginSenha(login,senha,this))
             {
-                ViewData["Erro"] = "Senha inválida";
+                return RedirectToAction("Index");
+
+            }else{
+                ViewData["Erro"] = "Usuario/Senha incorreta";
                 return View();
             }
-            else
-            {
-                HttpContext.Session.SetString("user", "admin");
-                return RedirectToAction("Index");
-            }
+
         }
 
         public IActionResult Privacy()

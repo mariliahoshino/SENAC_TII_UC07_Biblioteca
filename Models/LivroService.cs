@@ -37,14 +37,17 @@ namespace Biblioteca.Models
                 if(filtro != null)
                 {
                     //definindo dinamicamente a filtragem
-                    switch(filtro.TipoFiltro)
+                    switch(filtro.TipoFiltro)  
                     {
-                        case "Autor":
+                        case "Autor":  //1h42:30
+                        //query = bc.Emprestimos.Include(e => e.Livro).Where(e => e.NomeUsuario.Contains(filtro.Filtro));
+                            //query = bc.Livros.Include(l => l.Autor).Where(l => l.Autor.Contains(filtro.Filtro));
                             query = bc.Livros.Where(l => l.Autor.Contains(filtro.Filtro));
                         break;
 
                         case "Titulo":
                             query = bc.Livros.Where(l => l.Titulo.Contains(filtro.Filtro));
+                            //query = bc.Livros.Include(l => l.Autor).Where(l => l.Titulo.Contains(filtro.Filtro));
                         break;
 
                         default:
